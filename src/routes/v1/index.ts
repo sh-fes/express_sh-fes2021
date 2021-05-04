@@ -2,6 +2,7 @@ import { config, logging } from '@config';
 import express from 'express';
 import mongoose from 'mongoose';
 import { articleRouter } from './article';
+import { groupRouter } from './group';
 const router = express.Router();
 
 const NAMESPACE = 'Server-Router';
@@ -13,5 +14,6 @@ mongoose
 
 
 router.use('/article', articleRouter);
+router.use('/group', groupRouter);
 
 export default router;

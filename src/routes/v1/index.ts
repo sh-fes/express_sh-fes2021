@@ -1,7 +1,6 @@
 import { config, logging } from '@config';
 import express from 'express';
 import mongoose from 'mongoose';
-import { accountRouter } from './account';
 import { articleRouter } from './article';
 const router = express.Router();
 
@@ -14,6 +13,5 @@ mongoose
 
 
 router.use('/article', articleRouter);
-router.use('/account', accountRouter);
 
 export default router;

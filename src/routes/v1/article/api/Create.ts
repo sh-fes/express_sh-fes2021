@@ -1,10 +1,10 @@
 import { RequestHandler } from 'express';
-import { ArticleBaseSchema, articleModel as Article } from '../models';
+import { articleModel as Article, Article_Base_Schema_Options } from '../models';
 
 export interface Create_RequestHandler<
     P = {},
     ResBody = {},
-    ReqBody = { main: ArticleBaseSchema, articleId: string, groupId: string, groupTag: string },
+    ReqBody = { main: Article_Base_Schema_Options, articleId: string, groupId: string, groupTag: string },
     ReqQuery = {},
     Locals extends Record<string, any> = {}
     > extends RequestHandler<P, ResBody, ReqBody, ReqQuery, Locals> { }

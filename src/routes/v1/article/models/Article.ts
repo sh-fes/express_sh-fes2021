@@ -1,114 +1,46 @@
+import { Base_Display_Definition, Base_Display_Options, Base_SEO_Definition, Base_SEO_Options } from '@v1/model';
 import mongoose, { Document, Schema } from 'mongoose';
 
-export interface ArticleBaseSchema extends Document {
+export interface Article_Display_Options extends Base_Display_Options {
+    thumbnail: string;
+}
+export const Article_Display_Definition = {
+    thumbnail: { type: String, required: true, },
+    ...Base_Display_Definition,
+}
+
+export interface Article_SEO_Options extends Base_SEO_Options { }
+export const Article_SEO_Definition = {
+    ...Base_SEO_Definition,
+}
+
+export interface Article_Base_Schema_Options extends Document {
     author: string;
     createdAt: Date;
     updatedAt: Date;
-    display: {
-        title: string,              /**                                 */
-        description: string,        /**                                 */
-        tags: string[],             /**                                 */
-        thumbnail: string,          /** ^3 `image-url`                  */
-        content: string,            /**                                 */
-    } | null,
-    seo: {
-        common: {
-            title: string,
-            description: string,    /** ^3 length < 120                 */
-            // charset:string,      /** ^1 'utf-8'                      */
-            robots: string | null,  /** ^1 'noindex,nofollow' or null   */
-            keywords: string,       /**                                 */
-        },
-        og: {
-            title: string,          /**                                 */
-            type: string,           /**                                 */
-            url: string,            /**                                 */
-            image: string,          /** ^0 node-canvas                  */
-            // siteName: string,    /** ^1                              */
-            description: string,    /**                                 */
-            audio: string | null,   /** ^2                              */
-            // locale: string,      /** ^1 'ja_JP'                      */
-            video: string | null,   /** ^2                              */
-        },
-        fb: {
-            // appId: string,       /** ^1 `facebook-app-id`            */
-        }
-        twitter: {
-            // cardType: string,    /** ^1 `twitter-card-type`          */
-        }
-    } | null
+    display: Article_Display_Options | null;
+    seo: Article_SEO_Options | null;
 }
-export interface ArticleSchema extends Document {
-    articleId: string;
-    groupId: string;
-    groupTag: string[];
-    main: ArticleBaseSchema;
-    archive: ArticleBaseSchema[];
-}
-
-const ArticleBaseSchemaDefinition = {
+export const Article_Base_Schema = new Schema({
     author: { type: String, required: true, },
     createdAt: { type: Date, required: true, default: Date.now },
     updatedAt: { type: Date, required: true, default: Date.now },
-    display: {
-        type: {
-            title: { type: String, required: true, },
-            description: { type: String, required: true, },
-            tags: [{ type: String, required: false, default: null, }],
-            thumbnail: { type: String, required: true, },
-            content: { type: String, required: true, },
-        },
-        required: false
-    },
-    seo: {
-        type: {
-            common: {
-                title: { type: String, required: true, },
-                description: { type: String, required: true, },
-                robots: { type: String, required: false, default: null, },
-                keywords: { type: String, required: true, },
-            },
-            og: {
-                title: { type: String, required: true, },
-                type: { type: String, required: true, },
-                url: { type: String, required: true, },
-                image: { type: String, required: true, },
-                description: { type: String, required: true, },
-                audio: { type: String, required: false, default: null, },
-                video: { type: String, required: false, default: null, },
-            }
-        },
-        required: false
-    }
-}
-const ArticleMainSchema = new Schema(
-    {
-        ...ArticleBaseSchemaDefinition,
-    },
-    {
-        // timestamps: true,
-    }
-);
-const ArticleArchiveSchema = new Schema(
-    {
-        ...ArticleBaseSchemaDefinition,
-        archivedAt: { type: Date, required: true, },
-    },
-    {
-        // timestamps: true,
-    }
-)
-const ArticleSchema = new Schema(
-    {
-        articleId: { type: String, required: true, unique: true, },
-        groupId: { type: String, required: true, },
-        groupTag: [{ type: String, required: true }],
-        main: ArticleMainSchema,
-        archive: [ArticleMainSchema],
-    },
-    {
-        timestamps: true,
-    }
-)
+    display: { type: Article_Display_Definition, required: false, default: null, },
+    seo: { type: Article_SEO_Definition, required: false, default: null, },
+});
 
-export default mongoose.model('Article', ArticleSchema);
+export interface Article_Schema_Options extends Document {
+    articleId: string;
+    groupId: string;
+    groupTag: string[];
+    main: Article_Base_Schema_Options;
+    archive: Article_Base_Schema_Options[];
+}
+export const Article_Schema = new Schema({
+    articleId: { type: String, required: true, unique: true, },
+    groupId: { type: String, required: true, },
+    groupTag: [{ type: String, required: true }],
+    main: Article_Base_Schema,
+    archive: [Article_Base_Schema],
+});
+export default mongoose.model('Article', Article_Schema);

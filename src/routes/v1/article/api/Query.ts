@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import Article from '../models/Article';
+import { articleModel as Article } from '../models';
 
 export interface Query_RequestHandler<
     P = {},

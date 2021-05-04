@@ -1,1 +1,1 @@
-export { ArticleBaseSchema, ArticleSchema, default as articleModel } from './Article';
+export { Article_Base_Schema_Options, Article_Schema_Options, default as articleModel } from './Article';

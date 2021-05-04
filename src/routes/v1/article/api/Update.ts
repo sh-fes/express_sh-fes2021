@@ -1,10 +1,10 @@
 import { RequestHandler } from 'express';
-import { ArticleBaseSchema, articleModel as Article, ArticleSchema } from '../models';
+import { articleModel as Article, Article_Base_Schema_Options, Article_Schema_Options } from '../models';
 
 export interface Update_RequestHandler<
     P = {},
     ResBody = {},
-    ReqBody = { main: ArticleBaseSchema },
+    ReqBody = { main: Article_Base_Schema_Options },
     ReqQuery = { articleId: string, author: string },
     Locals extends Record<string, any> = {}
     > extends RequestHandler<P, ResBody, ReqBody, ReqQuery, Locals> { }
@@ -15,7 +15,7 @@ const Update: Update_RequestHandler = (req, res, next) => {
         Article.findOne({ articleId: req.query.articleId }, {}, {}, (err, doc) => {
             if (err) throw err;
             if (!doc) throw 'No document was found.';
-            doc.updateOne({ main, $push: { archive: (doc as ArticleSchema).main } }, {}, (err, result) => {
+            doc.updateOne({ main, $push: { archive: (doc as Article_Schema_Options).main } }, {}, (err, result) => {
                 if (err) throw err;
                 res.status(201).json({ result });
             });
